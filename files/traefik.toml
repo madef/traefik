@@ -1,0 +1,37 @@
+[global]
+  sendAnonymousUsage = false
+  checkNewVersion = false
+
+[log]
+  level = "WARNING"
+
+[api]
+  dashboard = true
+  debug = false
+  insecure = true
+
+[providers]
+  [providers.docker]
+    endpoint = "unix:///var/run/docker.sock"
+    watch = true
+    exposedByDefault = true
+    swarmMode = false
+  [providers.file]
+    filename = "/etc/traefik/traefik_dynamic.toml"
+    watch = true
+
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+
+  [entryPoints.https]
+    address = ":443"
+
+[certificatesResolvers.test-deflotte.acme]
+    #caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
+    caServer = "https://acme-v02.api.letsencrypt.org/directory"
+    storage = "/letsencrypt/acme.json"
+    email = "maxence@deflotte.fr"
+    [certificatesResolvers.test-deflotte.acme.tlsChallenge]
+    [certificatesResolvers.test-deflotte.acme.httpChallenge]
+        entryPoint = "web"

@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  traefik:
+    container_name: traefik_reverse_proxy
+    image: traefik:chevrotin 
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ./files/traefik.toml:/etc/traefik/traefik.toml:ro
+      - ./files/traefik_dynamic.toml:/etc/traefik/traefik_dynamic.toml:ro
+      - ./letsencrypt:/letsencrypt
+    networks:
+      - web
+networks:
+  web:
+    external: true
+      #enable_ipv6: true
+      #driver_opts:
+      #com.docker.network.enable_ipv6: "true"
+      #ipam:
+      #driver: default
+      #config:
+      #- subnet: fd10:255:3::/64
+      #- subnet: 10.128.3.0/24
